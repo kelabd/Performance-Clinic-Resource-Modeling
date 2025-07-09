@@ -1,0 +1,6 @@
+[theme]
+primaryColor = "#D8EBD5"             # Mint (buttons, highlights)
+backgroundColor = "#3E5237"          # Forest (main background)
+secondaryBackgroundColor = "#025E68" # Teal (sidebar/cards)
+textColor = "#FFFAF6"                # Off White (text)
+font = "sans serif"
