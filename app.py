@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import os
 
+from components.practitioner_hours import render_weekly_hours_editor, get_current_weekly_hours
+
+
 # Load input files
 input_dir = os.path.join(os.getcwd(), "Inputs")
 
@@ -30,7 +33,13 @@ for i, row in editable_rates.iterrows():
 # Convert to lookup structures
 monthly_fees = athlete_levels.set_index("Level").to_dict("index")
 practitioner_info = editable_rates.set_index("Role").to_dict("index")
-assignment_hours = assignments.set_index(["Level", "Role"]).to_dict()["Hours_per_week"]
+
+# UI input for weekly hours per role
+render_weekly_hours_editor(assignments)
+
+# Use updated hours in financial modeling
+assignment_hours = get_current_weekly_hours()
+
 
 # Main function
 def calculate_per_athlete_financials(level):
