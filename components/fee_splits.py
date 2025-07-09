@@ -25,6 +25,8 @@ def render_fee_split_editor(levels: List[int]):
         st.session_state.fee_splits = {level: DEFAULT_SPLITS[level].copy() for level in levels}
     if "modified_splits" not in st.session_state:
         st.session_state.modified_splits = {level: DEFAULT_SPLITS[level].copy() for level in levels}
+    if "normalize_requested" not in st.session_state:
+        st.session_state.normalize_requested = None  # will store the level needing normalization
 
     for level in levels:
         with st.sidebar.expander(f"Level {level} Fee Splits"):
@@ -32,12 +34,10 @@ def render_fee_split_editor(levels: List[int]):
                 default_val = DEFAULT_SPLITS[level][role]
                 current_val = st.session_state.modified_splits[level][role]
 
-                # Check if modified and if total is valid
                 total_pct = sum(st.session_state.modified_splits[level].values())
                 is_invalid = abs(total_pct - 100.0) > 1e-6
                 is_modified = abs(current_val - default_val) > 0.01
 
-                # Display styled label
                 if is_invalid and is_modified:
                     st.markdown(f"<span style='color:#F4864B;font-weight:bold'>{role} (%) - Level {level}</span>", unsafe_allow_html=True)
                 else:
@@ -54,36 +54,42 @@ def render_fee_split_editor(levels: List[int]):
                 )
                 st.session_state.modified_splits[level][role] = new_val
 
-            # Check if total is valid and handle normalization
             total_pct = sum(st.session_state.modified_splits[level].values())
             if abs(total_pct - 100.0) > 1e-6:
                 st.error(f"Current split total: {total_pct:.1f}%. Adjust or normalize.")
-
                 if st.button(f"Normalize Splits for Level {level}", key=f"normalize_{level}"):
-                    locked_roles = {
-                        role: val
-                        for role, val in st.session_state.modified_splits[level].items()
-                        if abs(val - DEFAULT_SPLITS[level][role]) > 0.01
-                    }
-                    remaining_roles = [r for r in DEFAULT_SPLITS[level] if r not in locked_roles]
+                    st.session_state.normalize_requested = level
 
-                    if not remaining_roles:
-                        st.warning("All roles have been edited. Please manually ensure the total adds to 100%.")
-                    else:
-                        remaining_pct = 100.0 - sum(locked_roles.values())
-                        even_split = round(remaining_pct / len(remaining_roles), 2)
-
-                        # Apply updated values
-                        for role in DEFAULT_SPLITS[level]:
-                            if role in locked_roles:
-                                new_val = locked_roles[role]
-                            else:
-                                new_val = even_split
-                            st.session_state.fee_splits[level][role] = new_val
-                            st.session_state.modified_splits[level][role] = new_val
-                        st.experimental_rerun()
             else:
                 st.session_state.fee_splits[level] = st.session_state.modified_splits[level].copy()
+
+    # Perform normalization after all UI is rendered
+    normalize_level = st.session_state.get("normalize_requested")
+    if normalize_level is not None:
+        locked_roles = {
+            role: val
+            for role, val in st.session_state.modified_splits[normalize_level].items()
+            if abs(val - DEFAULT_SPLITS[normalize_level][role]) > 0.01
+        }
+        remaining_roles = [r for r in DEFAULT_SPLITS[normalize_level] if r not in locked_roles]
+
+        if not remaining_roles:
+            st.warning("All roles have been edited. Please manually ensure the total adds to 100%.")
+        else:
+            remaining_pct = 100.0 - sum(locked_roles.values())
+            even_split = round(remaining_pct / len(remaining_roles), 2)
+
+            for role in DEFAULT_SPLITS[normalize_level]:
+                if role in locked_roles:
+                    new_val = locked_roles[role]
+                else:
+                    new_val = even_split
+                st.session_state.fee_splits[normalize_level][role] = new_val
+                st.session_state.modified_splits[normalize_level][role] = new_val
+
+        st.session_state.normalize_requested = None
+        st.experimental_rerun()
+
 
 def get_current_fee_splits():
     return st.session_state.get("fee_splits", DEFAULT_SPLITS)
