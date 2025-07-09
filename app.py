@@ -5,10 +5,10 @@ import os
 # Load input files
 input_dir = os.path.join(os.getcwd(), "Inputs")
 
-athlete_levels = pd.read_csv(os.path.join(input_dir, "athlete_levels.csv"))
-practitioner_roles = pd.read_csv(os.path.join(input_dir, "practitioner_roles.csv"))
-assignments = pd.read_csv(os.path.join(input_dir, "assignments.csv"))
-monthly_allocation = pd.read_csv(os.path.join(input_dir, "monthly_allocation.csv"))
+athlete_levels = pd.read_csv(os.path.join(input_dir, "Athlete_Levels.csv"))
+practitioner_roles = pd.read_csv(os.path.join(input_dir, "Practitioner_Roles.csv"))
+assignments = pd.read_csv(os.path.join(input_dir, "Assignments.csv"))
+monthly_allocation = pd.read_csv(os.path.join(input_dir, "Monthly_Allocation.csv"))
 
 # Set constants
 weeks_in_program = 12
