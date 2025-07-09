@@ -1,5 +1,5 @@
 [theme]
-primaryColor = "#6E8072"             # (buttons, highlights)
+primaryColor = "#F4864B"             # (buttons, highlights)
 backgroundColor = "#3E5237"          # (main background)
 secondaryBackgroundColor = "#6E8072" # (sidebar/cards)
 textColor = "#D8EBD5"                # (text)
