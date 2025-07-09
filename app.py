@@ -28,7 +28,7 @@ if st.sidebar.button("Reset All to Defaults"):
 
 # Section: Number of Athletes
 athlete_counts = {}
-with st.sidebar.expander("Number of Athletes per Level", expanded=False):
+with st.sidebar.expander("Number of Athletes", expanded=False):
     for level in athlete_levels["Level"]:
         athlete_counts[level] = st.number_input(
             f"Level {level}",
