@@ -114,4 +114,4 @@ for level in athlete_levels["Level"]:
 
 # Optional footer
 st.markdown("---")
-st.caption("Built by Cascaid Health · Contact: karam@cascaid.health")
+st.caption("Built by Cascaid Health · Contact: karam@cascaidhealth.com")
