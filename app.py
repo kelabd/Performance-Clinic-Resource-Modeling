@@ -3,7 +3,8 @@ import pandas as pd
 import os
 
 from components.athlete_fees import render_athlete_fee_editor, get_current_athlete_fees
-from components.fee_splits import render_fee_split_editor, get_current_fee_splits
+from components.fee_splits import render_fee_split_editor, get_current_fee_splits, display_fee_split_charts
+
 
 # Load input files
 input_dir = os.path.join(os.getcwd(), "Inputs")
@@ -35,8 +36,7 @@ render_athlete_fee_editor(athlete_levels)
 athlete_fees = get_current_athlete_fees()
 
 # Section: Fee Splits
-levels = sorted(athlete_levels["Level"].unique())
-render_fee_split_editor(levels)
+render_fee_split_editor(athlete_levels["Level"].tolist())
 fee_splits = get_current_fee_splits()
 
 # Financial modeling function
@@ -92,6 +92,9 @@ for level in athlete_levels["Level"]:
         df = pd.DataFrame.from_dict(breakdown, orient='index', columns=['Cost_per_Athlete'])
         df["Total_for_Level"] = df["Cost_per_Athlete"] * n_athletes
         st.dataframe(df.style.format("${:,.2f}"))
+        
+# Visualize fee splits
+display_fee_split_charts(athlete_levels["Level"].tolist())
 
 # Optional footer
 st.markdown("---")
