@@ -20,25 +20,12 @@ def render_fee_split_editor(levels: List[int]):
     for level in levels:
         with st.sidebar.expander(f"Level {level} Fee Splits"):
             for role in DEFAULT_SPLITS[level]:
-                default_val = DEFAULT_SPLITS[level][role]
-                current_val = st.session_state.modified_splits[level][role]
-            
-                # Highlight if changed from default and total is invalid
-                total_pct = sum(st.session_state.modified_splits[level].values())
-                is_invalid = abs(total_pct - 100.0) > 1e-6
-                is_modified = abs(current_val - default_val) > 0.01
-            
-                if is_invalid and is_modified:
-                    st.markdown(f"<span style='color:#F4864B;font-weight:bold'>{role} (%) - Level {level}</span>", unsafe_allow_html=True)
-                else:
-                    st.markdown(f"<span style='color:#3E5237'>{role} (%) - Level {level}</span>", unsafe_allow_html=True)
-            
                 new_val = st.number_input(
-                    label=" ",  # Empty label since we used custom markdown above
+                    f"{role} (%) - Level {level}",
                     min_value=0.0,
                     max_value=100.0,
                     step=1.0,
-                    value=current_val,
+                    value=st.session_state.modified_splits[level][role],
                     key=f"split_input_{role}_{level}"
                 )
                 st.session_state.modified_splits[level][role] = new_val
