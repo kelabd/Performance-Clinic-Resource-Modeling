@@ -4,6 +4,7 @@ import os
 
 from components.practitioner_hours import render_weekly_hours_editor, get_current_weekly_hours
 from components.practitioner_rates import render_hourly_rates_editor, get_current_hourly_rates
+from components.athlete_fees import render_athlete_fee_editor, get_current_athlete_fees
 
 
 # Load input files
@@ -23,6 +24,9 @@ athlete_counts = {}
 for level in athlete_levels["Level"]:
     athlete_counts[level] = st.sidebar.number_input(f"Athletes in Level {level}", min_value=0, value=1)
 
+# UI input for athlete monthly fees
+render_athlete_fee_editor(athlete_levels)
+
 # UI input for hourly rates (modularized)
 render_hourly_rates_editor(practitioner_roles)
 
@@ -32,8 +36,7 @@ editable_rates["Hourly_Rate"] = editable_rates["Role"].map(get_current_hourly_ra
 practitioner_info = editable_rates.set_index("Role").to_dict("index")
 
 # Convert to lookup structures
-monthly_fees = athlete_levels.set_index("Level").to_dict("index")
-practitioner_info = editable_rates.set_index("Role").to_dict("index")
+athlete_fees = get_current_athlete_fees()
 
 # UI input for weekly hours per role
 render_weekly_hours_editor(assignments)
@@ -44,7 +47,7 @@ assignment_hours = get_current_weekly_hours()
 
 # Main function
 def calculate_per_athlete_financials(level):
-    monthly_fee_data = monthly_fees[level]
+    athlete_fees = get_current_athlete_fees()
     total_revenue = 0
     total_cost = 0
     practitioner_cost_breakdown = {}
@@ -66,7 +69,7 @@ def calculate_per_athlete_financials(level):
 
     # Revenue
     for month in [1, 2, 3]:
-        monthly_fee = monthly_fee_data[f"Monthly_Fee_M{month}"]
+        monthly_fee = athlete_fees[(level, month)]
         total_revenue += monthly_fee
 
     profit = total_revenue - total_cost
