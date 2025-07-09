@@ -11,12 +11,12 @@ def render_hourly_rates_editor(practitioner_roles_df):
                 for _, row in practitioner_roles_df.iterrows()
             }
 
-        # Render number inputs for each role
+        # Display inputs for each practitioner role
         for _, row in practitioner_roles_df.iterrows():
             role = row["Role"]
             current_val = float(st.session_state.hourly_rates.get(role, float(row["Hourly_Rate"])))
             st.session_state.hourly_rates[role] = st.number_input(
-                f"{role}",
+                label=f"{role}",
                 min_value=0.0,
                 step=5.0,
                 value=current_val,
