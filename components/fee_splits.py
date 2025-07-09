@@ -19,7 +19,7 @@ ROLE_COLORS = {
 }
 
 def render_fee_split_editor(levels: List[int]):
-    st.sidebar.markdown("### Fee Splits (by % of Monthly Fee)")
+    st.sidebar.markdown("### Fee Splits")
 
     if "fee_splits" not in st.session_state:
         st.session_state.fee_splits = {level: DEFAULT_SPLITS[level].copy() for level in levels}
@@ -107,8 +107,9 @@ def display_fee_split_charts(levels: List[int]):
         sizes = list(splits.values())
         colors = [ROLE_COLORS.get(label, "#999999") for label in labels]
 
-        fig, ax = plt.subplots()
-        ax.pie(sizes, labels=labels, colors=colors, autopct="%1.1f%%", startangle=90)
-        ax.axis("equal")
-        st.markdown(f"**Level {level}**")
-        st.pyplot(fig)
+        with st.expander(f"Level {level} Fee Split Chart", expanded=True):
+            fig, ax = plt.subplots(figsize=(3, 3), facecolor='none')
+            ax.pie(sizes, labels=labels, colors=colors, autopct="%1.1f%%", startangle=90)
+            ax.axis("equal")
+            st.pyplot(fig, transparent=True)
+
