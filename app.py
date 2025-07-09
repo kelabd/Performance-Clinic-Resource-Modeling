@@ -17,7 +17,7 @@ monthly_allocation = pd.read_csv(os.path.join(input_dir, "Monthly_Allocation.csv
 weeks_in_program = 12
 
 # Sidebar title
-st.sidebar.title("Clinic Input Settings")
+st.sidebar.title("Input Settings")
 
 # Section: Number of Athletes
 athlete_counts = {}
