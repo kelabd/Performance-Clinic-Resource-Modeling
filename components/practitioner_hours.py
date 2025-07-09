@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 def render_weekly_hours_editor(assignments_df):
-    st.sidebar.markdown("### Weekly Hours per Role per Level")
+    st.sidebar.markdown("### Weekly Hours per Role")
 
     # Initialize editable hours state
     if "weekly_hours" not in st.session_state:

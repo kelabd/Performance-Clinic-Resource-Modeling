@@ -21,8 +21,9 @@ weeks_in_program = 12
 # Sidebar inputs
 st.sidebar.title("Clinic Input Settings")
 athlete_counts = {}
-for level in athlete_levels["Level"]:
-    athlete_counts[level] = st.sidebar.number_input(f"Athletes in Level {level}", min_value=0, value=1)
+with st.sidebar.expander("Number of Athletes per Level", expanded=True):
+    for level in athlete_levels["Level"]:
+        athlete_counts[level] = st.number_input(f"Level {level}", min_value=0, value=1, key=f"athletes_{level}")
 
 # UI input for athlete monthly fees
 render_athlete_fee_editor(athlete_levels)
