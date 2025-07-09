@@ -19,6 +19,11 @@ weeks_in_program = 12
 # Sidebar title
 st.sidebar.title("Input Settings")
 
+if st.sidebar.button("Reset All to Defaults"):
+    for key in list(st.session_state.keys()):
+        del st.session_state[key]
+    st.experimental_rerun()
+
 # Section: Number of Athletes
 athlete_counts = {}
 with st.sidebar.expander("Number of Athletes per Level", expanded=False):
