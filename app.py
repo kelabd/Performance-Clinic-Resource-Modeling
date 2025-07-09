@@ -20,9 +20,11 @@ weeks_in_program = 12
 st.sidebar.title("Input Settings")
 
 if st.sidebar.button("Reset All to Defaults"):
+    # Avoid deleting internal Streamlit keys
     for key in list(st.session_state.keys()):
-        del st.session_state[key]
-    st.experimental_rerun()
+        if not key.startswith("_"):  # Only clear user-defined keys
+            del st.session_state[key]
+    st.rerun()
 
 # Section: Number of Athletes
 athlete_counts = {}
