@@ -3,6 +3,7 @@ import pandas as pd
 import os
 
 from components.practitioner_hours import render_weekly_hours_editor, get_current_weekly_hours
+from components.practitioner_rates import render_hourly_rates_editor, get_current_hourly_rates
 
 
 # Load input files
@@ -22,13 +23,13 @@ athlete_counts = {}
 for level in athlete_levels["Level"]:
     athlete_counts[level] = st.sidebar.number_input(f"Athletes in Level {level}", min_value=0, value=1)
 
-# Editable tables
-st.sidebar.markdown("### Practitioner Rates")
+# UI input for hourly rates (modularized)
+render_hourly_rates_editor(practitioner_roles)
+
+# Apply updated rates to the working DataFrame
 editable_rates = practitioner_roles.copy()
-for i, row in editable_rates.iterrows():
-    editable_rates.at[i, "Hourly_Rate"] = st.sidebar.number_input(
-        f"{row['Role']} Hourly Rate", value=float(row["Hourly_Rate"]), step=5.0
-    )
+editable_rates["Hourly_Rate"] = editable_rates["Role"].map(get_current_hourly_rates())
+practitioner_info = editable_rates.set_index("Role").to_dict("index")
 
 # Convert to lookup structures
 monthly_fees = athlete_levels.set_index("Level").to_dict("index")
