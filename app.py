@@ -8,7 +8,7 @@ from components.fee_splits import render_fee_split_editor, get_current_fee_split
 # Trigger rerun safely if needed
 if st.session_state.get("trigger_fee_split_rerun"):
     del st.session_state["trigger_fee_split_rerun"]
-    st.experimental_rerun()
+    st.rerun()
 
 
 # Load input files
