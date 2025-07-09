@@ -42,19 +42,24 @@ fee_splits = get_current_fee_splits()
 
 # Financial modeling function
 def calculate_per_athlete_financials(level, program_fees, fee_splits):
-    total_revenue = program_fees[level]
-    total_cost = 0
-    cost_breakdown = {}
+    total_fee = program_fees[level]
+    splits = fee_splits[level]
 
-    for role, pct in fee_splits[level].items():
-        role_cost = total_revenue * (pct / 100)
-        total_cost += role_cost
-        cost_breakdown[role] = role_cost
+    platform_pct = splits.get("Platform", 0)
+    revenue = total_fee * (platform_pct / 100)
 
-    profit = total_revenue - total_cost
+    cost_breakdown = {
+        role: total_fee * (pct / 100)
+        for role, pct in splits.items()
+        if role != "Platform"
+    }
+    total_cost = sum(cost_breakdown.values())
+
+    profit = revenue - total_cost
+
     return {
         "Level": level,
-        "Total_Revenue": total_revenue,
+        "Total_Revenue": revenue,
         "Total_Cost": total_cost,
         "Profit": profit,
         "Practitioner_Cost_Breakdown": cost_breakdown
