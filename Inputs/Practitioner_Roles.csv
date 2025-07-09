@@ -1,0 +1,8 @@
+Role,Hourly_Rate,Is_OneTime,OneTime_Cost
+Executive Director,0,True,500
+Operations Lead,75,False,0
+Specialist,0,True,300
+Director,100,False,0
+Quarterback,120,False,0
+Coach,80,False,0
+Intern,20,False,0

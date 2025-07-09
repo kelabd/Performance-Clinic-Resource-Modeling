@@ -1,0 +1,9 @@
+Level,Role,Hours_per_week
+3,Quarterback,0.5
+3,Coach,2.0
+4,Quarterback,3.0
+4,Coach,4.0
+5,Quarterback,4.0
+5,Coach,5.0
+5,Director,1.0
+5,Intern,2.0
