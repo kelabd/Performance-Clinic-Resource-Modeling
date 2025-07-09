@@ -18,7 +18,7 @@ def render_hourly_rates_editor(practitioner_roles_df):
             f"{role}",
             min_value=0.0,
             step=5.0,
-            value=st.session_state.hourly_rates.get(role, row["Hourly_Rate"]),
+            value=float(st.session_state.hourly_rates.get(role, float(row["Hourly_Rate"]))),
             key=f"rate_input_{role}"
         )
 
