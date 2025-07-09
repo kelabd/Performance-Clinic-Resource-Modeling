@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 
-from components.athlete_fees import render_athlete_fee_editor, get_current_athlete_fees
+from components.program_fees import render_program_fee_editor, get_current_program_fees
 from components.fee_splits import render_fee_split_editor, get_current_fee_splits, display_fee_split_charts
 
 
@@ -31,17 +31,18 @@ with st.sidebar.expander("Number of Athletes", expanded=False):
             key=f"athletes_{level}"
         )
 
-# Section: Monthly Fees per Athlete
-render_athlete_fee_editor(athlete_levels)
-athlete_fees = get_current_athlete_fees()
+# Section: Program Fees per Athlete
+render_program_fee_editor(athlete_levels)
+program_fees = get_current_program_fees()
+
 
 # Section: Fee Splits
 render_fee_split_editor(athlete_levels["Level"].tolist())
 fee_splits = get_current_fee_splits()
 
 # Financial modeling function
-def calculate_per_athlete_financials(level, athlete_fees, fee_splits):
-    total_revenue = sum(athlete_fees[(level, month)] for month in [1, 2, 3])
+def calculate_per_athlete_financials(level, program_fees, fee_splits):
+    total_revenue = program_fees[level]
     total_cost = 0
     cost_breakdown = {}
 
@@ -66,7 +67,7 @@ st.title("Performance Clinic Financial Model")
 results = []
 for level in athlete_levels["Level"]:
     n_athletes = athlete_counts[level]
-    per_athlete = calculate_per_athlete_financials(level, athlete_fees, fee_splits)
+    per_athlete = calculate_per_athlete_financials(level, program_fees, fee_splits)
     results.append({
         "Level": level,
         "Athletes": n_athletes,
@@ -88,7 +89,7 @@ st.subheader("Cost Breakdown by Level")
 for level in athlete_levels["Level"]:
     with st.expander(f"Level {level} Breakdown"):
         n_athletes = athlete_counts[level]
-        breakdown = calculate_per_athlete_financials(level, athlete_fees, fee_splits)["Practitioner_Cost_Breakdown"]
+        breakdown = calculate_per_athlete_financials(level, program_fees, fee_splits)["Practitioner_Cost_Breakdown"]
         df = pd.DataFrame.from_dict(breakdown, orient='index', columns=['Cost_per_Athlete'])
         df["Total_for_Level"] = df["Cost_per_Athlete"] * n_athletes
         st.dataframe(df.style.format("${:,.2f}"))
