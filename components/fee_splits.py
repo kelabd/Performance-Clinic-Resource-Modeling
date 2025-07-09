@@ -93,7 +93,7 @@ def render_fee_split_editor(levels: List[int]):
 
         st.session_state.normalize_requested_level = None
         st.session_state.pending_normalization = False
-        st.experimental_rerun()
+        st.session_state["trigger_fee_split_rerun"] = True
 
 
 def get_current_fee_splits():
