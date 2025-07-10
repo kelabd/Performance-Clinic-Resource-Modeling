@@ -1,6 +1,6 @@
 [theme]
 primaryColor = "#F4864B"             # (buttons, highlights)
 backgroundColor = "#FFFAF6"          # (main background)
-secondaryBackgroundColor = "#6E8072" # (sidebar/cards)
+secondaryBackgroundColor = "#D8EBD5" # (sidebar/cards)
 textColor = "#505149"                # (text)
 font = "monospace"
