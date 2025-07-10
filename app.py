@@ -6,6 +6,7 @@ import os
 
 from components.program_fees import render_program_fee_editor, get_current_program_fees
 from components.fee_splits import render_fee_split_editor, get_current_fee_splits, display_fee_split_charts
+from components.athlete_counts import render_athlete_counts
 
 # Trigger rerun safely if needed
 if st.session_state.get("trigger_fee_split_rerun"):
@@ -28,15 +29,7 @@ if st.sidebar.button("Reset All to Defaults"):
     st.rerun()
 
 # Section: Number of Athletes
-athlete_counts = {}
-with st.sidebar.expander("Number of Athletes", expanded=False):
-    for level in athlete_levels["Level"]:
-        athlete_counts[level] = st.number_input(
-            f"Level {level}",
-            min_value=0,
-            value=1,
-            key=f"athletes_{level}"
-        )
+athlete_counts = render_athlete_counts(athlete_levels["Level"].tolist())
 
 # Section: Program Fees per Athlete
 render_program_fee_editor(athlete_levels)

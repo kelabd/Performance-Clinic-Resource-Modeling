@@ -3,6 +3,8 @@
 import streamlit as st
 import pandas as pd
 
+from components.athlete_counts import render_athlete_counts
+
 # --- Configurable defaults ---
 DEFAULT_QB_HOURS_PER_ATHLETE = {3: 0.5, 4: 3, 5: 4}
 DEFAULT_COACH_HOURS_PER_ATHLETE = {3: 2, 4: 4, 5: 5}
@@ -12,14 +14,7 @@ ATHLETE_LEVELS = [3, 4, 5]
 st.title("Capacity Modeling")
 
 st.header("1. Athlete Counts")
-athlete_counts = {}
-for level in ATHLETE_LEVELS:
-    athlete_counts[level] = st.number_input(
-        f"Number of Level {level} Athletes",
-        min_value=0,
-        value=st.session_state.get(f"athletes_{level}", 1),
-        key=f"capacity_athletes_{level}"
-    )
+athlete_counts = render_athlete_counts()
 
 # --- Input: Available Practitioners ---
 st.header("2. Practitioner Availability")
@@ -73,7 +68,7 @@ st.write(f"Available: **{available_qb_hours:.1f}** hrs/week")
 if total_required_qb_hours > available_qb_hours:
     st.error("⚠️ Not enough QB capacity!")
 else:
-    st.success("✅ QB capacity is sufficient.")
+    st.success("QB capacity is sufficient.")
 
 st.subheader("Coach Capacity")
 st.write(f"Required: **{total_required_coach_hours:.1f}** hrs/week")
@@ -81,4 +76,4 @@ st.write(f"Available: **{available_coach_hours:.1f}** hrs/week")
 if total_required_coach_hours > available_coach_hours:
     st.error("⚠️ Not enough Coach capacity!")
 else:
-    st.success("✅ Coach capacity is sufficient.")
+    st.success("Coach capacity is sufficient.")
