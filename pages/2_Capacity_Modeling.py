@@ -28,11 +28,32 @@ st.header("Practitioner Availability")
 
 col1, col2 = st.columns(2)
 with col1:
-    num_qbs = st.number_input("Number of QBs", min_value=0, value=2)
-    max_qb_hours = st.number_input("Max Hours per QB per Week", min_value=0.0, value=20.0)
+    num_qbs = st.number_input(
+        "Number of QBs", 
+        min_value=0, 
+        value=2,
+        step=1  # Step size for integer input
+    )
+    max_qb_hours = st.number_input(
+        "Max Hours per QB per Week", 
+        min_value=0.0, 
+        value=20.0,
+        step=0.5  # Step size for float input
+    )
+
 with col2:
-    num_coaches = st.number_input("Number of Coaches", min_value=0, value=2)
-    max_coach_hours = st.number_input("Max Hours per Coach per Week", min_value=0.0, value=20.0)
+    num_coaches = st.number_input(
+        "Number of Coaches", 
+        min_value=0, 
+        value=2,
+        step=1
+    )
+    max_coach_hours = st.number_input(
+        "Max Hours per Coach per Week", 
+        min_value=0.0, 
+        value=20.0,
+        step=0.5
+    )
 
 # --- Input: Weekly Hours per Athlete per Role ---
 st.header("Weekly Service Time per Athlete")
