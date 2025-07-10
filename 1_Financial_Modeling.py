@@ -3,6 +3,8 @@
 import streamlit as st
 import pandas as pd
 import os
+import io
+from pandas import ExcelWriter
 
 from components.program_fees import render_program_fee_editor, get_current_program_fees
 from components.fee_splits import render_fee_split_editor, get_current_fee_splits, display_fee_split_charts
@@ -108,6 +110,41 @@ for level in athlete_levels["Level"]:
         
 # Visualize fee splits
 display_fee_split_charts(athlete_levels["Level"].tolist())
+
+# -- Button to trigger export --
+if st.button("Download Financial Model as Spreadsheet"):
+    output = io.BytesIO()
+
+    with ExcelWriter(output, engine='xlsxwriter') as writer:
+        # Sheet 1: Athlete Counts
+        pd.DataFrame({
+            "Level": athlete_counts.keys(),
+            "Number of Athletes": athlete_counts.values()
+        }).to_excel(writer, sheet_name="Athlete Counts", index=False)
+
+        # Sheet 2: Program Fees
+        pd.DataFrame({
+            "Level": program_fees.keys(),
+            "Program Fee per Athlete": program_fees.values()
+        }).to_excel(writer, sheet_name="Program Fees", index=False)
+
+        # Sheet 3: Fee Splits
+        fee_split_rows = []
+        for level, splits in fee_splits.items():
+            for role, pct in splits.items():
+                fee_split_rows.append({"Level": level, "Role": role, "Percentage": pct})
+        pd.DataFrame(fee_split_rows).to_excel(writer, sheet_name="Fee Splits", index=False)
+
+        # Sheet 4: Financial Summary
+        results_df.to_excel(writer, sheet_name="Financial Summary", index=False)
+
+    st.download_button(
+        label="Download Excel File",
+        data=output.getvalue(),
+        file_name="Financial_Model_Snapshot.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
 
 # Optional footer
 st.markdown("---")

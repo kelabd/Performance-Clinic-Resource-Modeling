@@ -2,6 +2,8 @@
 
 import streamlit as st
 import pandas as pd
+import io
+from pandas import ExcelWriter
 
 # --- Configurable defaults ---
 DEFAULT_QB_HOURS_PER_ATHLETE = {3: 0.5, 4: 3, 5: 4}
@@ -105,3 +107,50 @@ if total_required_coach_hours > available_coach_hours:
     st.error("Not enough Coach capacity!")
 else:
     st.success("Coach capacity is sufficient.")
+    
+
+if st.button("Download Capacity Model as Spreadsheet"):
+    output = io.BytesIO()
+    with ExcelWriter(output, engine="xlsxwriter") as writer:
+        # Sheet 1: Athlete Counts
+        pd.DataFrame({
+            "Level": athlete_counts.keys(),
+            "Number of Athletes": athlete_counts.values()
+        }).to_excel(writer, sheet_name="Athlete Counts", index=False)
+
+        # Sheet 2: Practitioner Settings
+        pd.DataFrame([
+            {"Role": "QB", "Count": num_qbs, "Max Hours per Week": max_qb_hours},
+            {"Role": "Coach", "Count": num_coaches, "Max Hours per Week": max_coach_hours}
+        ]).to_excel(writer, sheet_name="Practitioner Settings", index=False)
+
+        # Sheet 3: Weekly Hours per Athlete
+        pd.DataFrame({
+            "Level": ATHLETE_LEVELS,
+            "QB Hours per Athlete": [qb_hours[lvl] for lvl in ATHLETE_LEVELS],
+            "Coach Hours per Athlete": [coach_hours[lvl] for lvl in ATHLETE_LEVELS]
+        }).to_excel(writer, sheet_name="Weekly Hours per Athlete", index=False)
+
+        # Sheet 4: Capacity Summary
+        pd.DataFrame([
+            {
+                "Role": "QB",
+                "Required Hours": total_required_qb_hours,
+                "Available Hours": available_qb_hours,
+                "Status": "✅ Sufficient" if total_required_qb_hours <= available_qb_hours else "❌ Not enough"
+            },
+            {
+                "Role": "Coach",
+                "Required Hours": total_required_coach_hours,
+                "Available Hours": available_coach_hours,
+                "Status": "✅ Sufficient" if total_required_coach_hours <= available_coach_hours else "❌ Not enough"
+            }
+        ]).to_excel(writer, sheet_name="Capacity Summary", index=False)
+
+    st.download_button(
+        label="Download Excel File",
+        data=output.getvalue(),
+        file_name="Capacity_Model_Snapshot.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
