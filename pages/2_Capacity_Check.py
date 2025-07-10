@@ -43,14 +43,14 @@ for level in ATHLETE_LEVELS:
         qb_hours[level] = st.number_input(
             f"QB Hours for Level {level} Athlete",
             min_value=0.0,
-            value=DEFAULT_QB_HOURS_PER_ATHLETE[level],
+            value=float(DEFAULT_QB_HOURS_PER_ATHLETE[level]),
             key=f"qb_hours_{level}"
         )
     with col2:
         coach_hours[level] = st.number_input(
             f"Coach Hours for Level {level} Athlete",
             min_value=0.0,
-            value=DEFAULT_COACH_HOURS_PER_ATHLETE[level],
+            value=float(DEFAULT_COACH_HOURS_PER_ATHLETE[level]),
             key=f"coach_hours_{level}"
         )
 
