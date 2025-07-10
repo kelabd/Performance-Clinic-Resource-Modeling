@@ -50,14 +50,13 @@ render_fee_split_editor(athlete_levels["Level"].tolist())
 fee_splits = get_current_fee_splits()
 
 # Financial modeling function
-def calculate_per_athlete_financials(level, fee_splits):
+def calculate_per_athlete_financials(level, program_fees, fee_splits):
     total_program_fee = program_fees[level]
     splits = fee_splits[level]
 
-    # Revenue is the full program fee paid
     revenue = total_program_fee
 
-    # Calculate cost: all splits except Platform
+    # Cost = sum of all splits except Platform
     cost_breakdown = {
         role: total_program_fee * (pct / 100)
         for role, pct in splits.items()
@@ -74,6 +73,7 @@ def calculate_per_athlete_financials(level, fee_splits):
         "Profit": profit,
         "Practitioner_Cost_Breakdown": cost_breakdown
     }
+
 
 # Main dashboard output
 st.title("Performance Clinic Financial Model")
