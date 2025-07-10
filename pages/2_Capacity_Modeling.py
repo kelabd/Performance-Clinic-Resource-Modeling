@@ -11,7 +11,7 @@ ATHLETE_LEVELS = [3, 4, 5]
 # --- Input: Total number of athletes (carried from Financial Modeling page) ---
 st.title("Capacity Modeling")
 
-st.header("1. Athlete Counts")
+st.header("Athlete Counts")
 athlete_counts = {}
 for level in ATHLETE_LEVELS:
     key = f"capacity_athletes_{level}"
@@ -24,7 +24,7 @@ for level in ATHLETE_LEVELS:
     )
 
 # --- Input: Available Practitioners ---
-st.header("2. Practitioner Availability")
+st.header("Practitioner Availability")
 
 col1, col2 = st.columns(2)
 with col1:
@@ -35,7 +35,7 @@ with col2:
     max_coach_hours = st.number_input("Max Hours per Coach per Week", min_value=0.0, value=20.0)
 
 # --- Input: Weekly Hours per Athlete per Role ---
-st.header("3. Weekly Service Time per Athlete")
+st.header("Weekly Service Time per Athlete")
 qb_hours = {}
 coach_hours = {}
 
@@ -57,7 +57,7 @@ for level in ATHLETE_LEVELS:
         )
 
 # --- Calculation ---
-st.header("4. Capacity Check")
+st.header("Capacity Check")
 
 def compute_required_hours(counts, per_athlete_hours):
     return sum(counts[lvl] * per_athlete_hours[lvl] for lvl in ATHLETE_LEVELS)
