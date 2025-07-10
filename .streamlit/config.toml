@@ -2,5 +2,5 @@
 primaryColor = "#F4864B"             # (buttons, highlights)
 backgroundColor = "#FFFAF6"          # (main background)
 secondaryBackgroundColor = "#6E8072" # (sidebar/cards)
-textColor = "#3E5237"                # (text)
+textColor = "#B9C37A"                # (text)
 font = "monospace"
