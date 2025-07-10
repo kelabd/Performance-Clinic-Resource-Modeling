@@ -14,11 +14,13 @@ st.title("Capacity Modeling")
 st.header("1. Athlete Counts")
 athlete_counts = {}
 for level in ATHLETE_LEVELS:
+    key = f"capacity_athletes_{level}"
+    default_val = st.session_state.get(key, 1)
     athlete_counts[level] = st.number_input(
         f"Number of Level {level} Athletes",
         min_value=0,
-        value=st.session_state.get(f"athletes_{level}", 1),
-        key=f"capacity_athletes_{level}"
+        value=default_val,
+        key=key
     )
 
 # --- Input: Available Practitioners ---
