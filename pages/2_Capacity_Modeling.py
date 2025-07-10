@@ -73,14 +73,14 @@ st.subheader("QB Capacity")
 st.write(f"Required: **{total_required_qb_hours:.1f}** hrs/week")
 st.write(f"Available: **{available_qb_hours:.1f}** hrs/week")
 if total_required_qb_hours > available_qb_hours:
-    st.error("⚠️ Not enough QB capacity!")
+    st.error("Not enough QB capacity!")
 else:
-    st.success("✅ QB capacity is sufficient.")
+    st.success("QB capacity is sufficient.")
 
 st.subheader("Coach Capacity")
 st.write(f"Required: **{total_required_coach_hours:.1f}** hrs/week")
 st.write(f"Available: **{available_coach_hours:.1f}** hrs/week")
 if total_required_coach_hours > available_coach_hours:
-    st.error("⚠️ Not enough Coach capacity!")
+    st.error("Not enough Coach capacity!")
 else:
-    st.success("✅ Coach capacity is sufficient.")
+    st.success("Coach capacity is sufficient.")
